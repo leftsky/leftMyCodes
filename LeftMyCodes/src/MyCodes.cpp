@@ -51,8 +51,13 @@ namespace leftName {
 			? (HMODULE)mbi.AllocationBase : NULL);
 	}
 #endif
+
 	char* GetTimeStr(char *TimeStr, int SizeOfBuf) {
-		time_t tt = time(NULL);
+		return GetTimeStr(TimeStr, SizeOfBuf, 0);
+	}
+
+	char* GetTimeStr(char *TimeStr, int SizeOfBuf, int off) {
+		time_t tt = time(NULL) + off;
 #ifdef LEFT_OS_WIN
 		tm tmt;
 		tm* t = &tmt;

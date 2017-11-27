@@ -113,6 +113,7 @@ namespace leftName {
 #endif
 	// 获得当前的时间字符串
 	char *GetTimeStr(char *TimeStr, int SizeOfBuf);
+	char *GetTimeStr(char *TimeStr, int SizeOfBuf, int off);
 	// 将字符串命令转换成长度为一半的十六进制字符串
 	char *StrToHex(const char *buf, char *Answer, int LenOfAnswer);
 	// 将十六进制的(大写)字符串转换成两倍长度的字符串
