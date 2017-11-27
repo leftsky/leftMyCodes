@@ -2,7 +2,7 @@
 cmake_minimum_required(VERSION 3.2)
 
 # Appoint the name of project
-PROJECT(leftMyCodes)
+PROJECT(LeftMyCodes)
 
 # support C++ 11
 add_compile_options(-std=c++11)

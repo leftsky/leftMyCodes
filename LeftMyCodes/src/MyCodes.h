@@ -121,13 +121,13 @@ namespace leftName {
 		const char *order, int LenOfOrder, char *Answer, int LenOfAnswer);
 	// 解析INI文件,提供查询,填写和删除链表操作.删除链表请保证Head可被delete[],即是new出来的
 	typedef struct _INI_INFO_LIST {
-		_INI_INFO_LIST*		Next;
-		char*				Key;
-		char*				Value;
+		_INI_INFO_LIST		*Next;
+		char				*Key;
+		char				*Value;
 	} IniInfo, *pIniInfo;
-	LEFT_ERROR AnalysisIniFile(char *path, pIniInfo InfoHead);
+	LEFT_ERROR AnalysisIniFile(char *path, pIniInfo *InfoHead);
 	LEFT_ERROR GetIniInfo(
-		const char *key, char *value, int valueLen, pIniInfo infoHead);
+		const char *key, char *ValueBuf, int ValueLen, pIniInfo InfoHead);
 	LEFT_ERROR DelIniInfoList(pIniInfo infoList);
 	// 根据间隔符获得内部字符串CutStr
 	char *getNextOrder(char **buf, char *order, int Len, char SignChar);

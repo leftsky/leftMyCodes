@@ -9,10 +9,10 @@
 #include <ShlObj.h>
 #endif
 
-unsigned long long hash_(char const * str) {
- unsigned long long ret{ basis };
- while (*str) { ret ^= *str; ret *= prime; str++; }
- return ret;
+unsigned long long hash_(char const *str) {
+	unsigned long long ret{ basis };
+	while (*str) { ret ^= *str; ret *= prime; str++; }
+	return ret;
 }
 
 namespace leftName {
@@ -52,11 +52,11 @@ namespace leftName {
 	}
 #endif
 
-	char* GetTimeStr(char *TimeStr, int SizeOfBuf) {
+	char *GetTimeStr(char *TimeStr, int SizeOfBuf) {
 		return GetTimeStr(TimeStr, SizeOfBuf, 0);
 	}
 
-	char* GetTimeStr(char *TimeStr, int SizeOfBuf, int off) {
+	char *GetTimeStr(char *TimeStr, int SizeOfBuf, int off) {
 		time_t tt = time(NULL) + off;
 #ifdef LEFT_OS_WIN
 		tm tmt;
@@ -76,7 +76,7 @@ namespace leftName {
 		return TimeStr;
 	}
 
-	char* StrToHex(const char *buf, char *Answer, int LenOfAnswer) {
+	char *StrToHex(const char *buf, char *Answer, int LenOfAnswer) {
 		if ((int)strlen(buf) % 2 != 0 || (int)strlen(buf) / 2 >= LenOfAnswer)
 			return NULL;
 		for (size_t i = 0; i < strlen(buf) / 2; i++) {
@@ -123,8 +123,8 @@ namespace leftName {
 		return NULL;
 	}
 
-	char* HexToStr(
-		const char* order, int LenOfOrder, char *Answer, int LenOfAnswer) {
+	char *HexToStr(
+		const char *order, int LenOfOrder, char *Answer, int LenOfAnswer) {
 		if (LenOfOrder * 2 >= LenOfAnswer)
 			return NULL;
 		char low, high;
@@ -144,14 +144,17 @@ namespace leftName {
 		return Answer;
 	}
 
-	LEFT_ERROR AnalysisIniFile(char *path, pIniInfo InfoHead) {
+	LEFT_ERROR AnalysisIniFile(char *path, pIniInfo *InfoHead) {
 		if (!path || !InfoHead)
 			return LEFT_ERROR_ARGVS;
+		*InfoHead = new IniInfo;
+		memset(*InfoHead, 0, sizeof(IniInfo));
 		std::ifstream ini(path, std::ios::in);
 		if (!ini.is_open())
 			return LEFT_ERROR_IO_FILEOPEN;
 		char words[MAX_INI_INFO_LEN] = { 0 };
 		while (ini.getline(words, sizeof(words) - 1)) {
+			std::cout << words << std::endl;
 			char* cut = strstr(words, "=");
 			if (!cut) continue;
 			*cut = '\0';
@@ -160,28 +163,28 @@ namespace leftName {
 			snprintf(key, strlen(words) + 1, words);
 			snprintf(value, strlen(cut + 1) + 1, cut + 1);
 			pIniInfo p = new IniInfo;
-			InfoHead->Next = p;
+			(*InfoHead)->Next = p;
 			p->Next = NULL;
 			p->Key = key;
 			p->Value = value;
-			InfoHead = InfoHead->Next;
-			//std::cout << "Check info >>> " << p->Key << ":" << p->Value << std::endl;
+			*InfoHead = (*InfoHead)->Next;
+			std::cout << "Check info >>> " << p->Key << ":" << p->Value << std::endl;
 		}
 		ini.close();
 		return LEFT_SUCCESS;
 	}
 
 	LEFT_ERROR GetIniInfo(
-		const char *key, char *value, int valueLen, pIniInfo infoHead) {
-		if (!key || !value || !infoHead)
+		const char *key, char *ValueBuf, int ValueLen, pIniInfo InfoHead) {
+		if (!key || !ValueBuf || !InfoHead)
 			return LEFT_ERROR_ARGVS;
-		pIniInfo info = infoHead;
+		pIniInfo info = InfoHead;
 		while (info) {
 			if (info->Key && !strcmp(info->Key, key) && info->Value) {
-				if (valueLen <= (int)strlen(info->Value))
+				if (ValueLen <= (int)strlen(info->Value))
 					return LEFT_ERROR_LEN;
 				else {
-					snprintf(value, valueLen, info->Value);
+					snprintf(ValueBuf, ValueLen, info->Value);
 					return LEFT_SUCCESS;
 				}
 			}
