@@ -30,8 +30,9 @@ ADD_EXECUTABLE(${PROJECT_NAME} ${_MATH})
 # Add link library
 IF (WIN32) 
 	TARGET_LINK_LIBRARIES(${PROJECT_NAME} 
-	../src/win/lib/x86/PCOMM)
+	../src/lib/win/x64/PCOMM)
 ELSEIF (UNIX)  
-	TARGET_LINK_LIBRARIES(${PROJECT_NAME} m)
+	TARGET_LINK_LIBRARIES(${PROJECT_NAME} m
+	../src/lib/linux/mxphio)
 ENDIF ()  
 

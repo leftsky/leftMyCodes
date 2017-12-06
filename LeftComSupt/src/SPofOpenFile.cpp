@@ -15,7 +15,6 @@
 #include <string.h>
 #include <iostream>
 
-#include "LeftComSupport.h"
 
 //#define BAUDRATE        B57600
 //#define UART_DEVICE     "/dev/ttyM0"  
@@ -34,9 +33,9 @@ B115200, B38400, B19200, B9600, B4800, B2400, B1200, B300, };
 int name_arr[] = { 115200, 57600, 38400, 19200, 9600, 4800, 2400, 1200,  300,
 115200, 38400, 19200, 9600, 4800, 2400, 1200,  300, };
 
-using namespace leftCom;
+using namespace leftSilPt;
 
-void leftCom::set_speed(int fd, int speed) {
+void leftSilPt::set_speed(int fd, int speed) {
 	int   i;
 	int   status;
 	struct termios   Opt;
@@ -63,7 +62,7 @@ void leftCom::set_speed(int fd, int speed) {
 *@param  stopbits 类型  int 停止位   取值为 1 或者2
 *@param  parity  类型  int  效验类型 取值为N,E,O,,S
 */
-int leftCom::set_Parity(int fd, int databits, int stopbits, int parity)
+int leftSilPt::set_Parity(int fd, int databits, int stopbits, int parity)
 {
 	struct termios options;
 	if (tcgetattr(fd, &options) != 0) {
@@ -137,7 +136,7 @@ int leftCom::set_Parity(int fd, int databits, int stopbits, int parity)
 	return (TRUE);
 }
 ////////////////////////////////////////////////////////////////////////////////  
-int leftCom::ComInit(char* comName, int bitlv) {
+int leftSilPt::ComInit(char* comName, int bitlv) {
 
 	int		fd, c = 0, res;
 	char	buf[256];
