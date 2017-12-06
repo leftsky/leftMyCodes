@@ -1,4 +1,9 @@
-﻿
+﻿/* Copyright (c) left
+** FileName:		Mycodes.cpp
+** Version:			1.3.0
+** Update time:		2017-12-06
+*/
+
 #include "MyCodes.h"
 
 #include <stdio.h>
@@ -241,6 +246,75 @@ namespace leftName {
 			buff[firstLen++] = SignChar;
 		buff[firstLen] = '\0';
 		return LEFT_SUCCESS;
+	}
+
+	ThrSfeList::ThrSfeList():
+		buf(NULL), 
+		len(0),
+		role(Head),
+		Last(NULL),
+		Next(this) {
+		LeftInitSimpleLock(&lock);
+	}
+
+	ThrSfeList::ThrSfeList(char *buf, unsigned int len, LeftSimpleLock lock,
+		ThrSfeList *Last, ThrSfeList *Next) :
+		role(boddy),
+		Last(Last),
+		Next(Next),
+		lock(lock){
+		LeftGetSimpleLock(&lock);
+		if (len && buf) {
+			this->buf = new char[len];
+			this->len = len;
+			memcpy(this->buf, buf, len);
+		}
+		if (Last)
+			Last->Next = this;
+		if (Next)
+			Next->Last = this;
+		LeftGiveSimpleLock(&lock);
+	}
+
+	ThrSfeList::~ThrSfeList() {
+		switch (role) {
+		case Head:
+			LeftDelSimpleLock(&lock);
+		case boddy:
+			delete[] buf;
+		case Tail:
+			break;
+		}
+		if (Last)
+			Last->Next = Next;
+		if (Next)
+			Next->Last = Last;
+	}
+
+	char *ThrSfeList::GetLast(char *buf, unsigned int len) {
+		if (!buf || !Last || Last->role != boddy || len < Last->len)
+			return NULL;
+		LeftGetSimpleLock(&lock);
+		memcpy(buf, Last->buf, Last->len);
+		LeftGiveSimpleLock(&lock);
+		delete Last;
+		return buf;
+	}
+
+	char *ThrSfeList::GetBuf(char *buf, unsigned int len) {
+		if (!buf || len < this->len)
+			return NULL;
+		LeftGetSimpleLock(&lock);
+		memcpy(buf, this->buf, this->len);
+		LeftGiveSimpleLock(&lock);
+		return buf;
+	}
+
+	bool ThrSfeList::Add(char *buf, unsigned int len) {
+		if (!buf || !len)
+			return false;
+		new ThrSfeList(buf, len, lock, this, Next);
+		return true;
 	}
 
 }
