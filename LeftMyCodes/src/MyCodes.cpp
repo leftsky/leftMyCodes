@@ -1,7 +1,7 @@
 ﻿/* Copyright (c) left
 ** FileName:		Mycodes.cpp
-** Version:			1.3.0
-** Update time:		2017-12-06
+** Version:			1.3.1
+** Update time:		2017-12-07
 */
 
 #include "MyCodes.h"
@@ -291,14 +291,15 @@ namespace leftName {
 			Next->Last = Last;
 	}
 
-	char *ThrSfeList::GetLast(char *buf, unsigned int len) {
+	unsigned int ThrSfeList::GetLast(char *buf, unsigned int len) {
 		if (!buf || !Last || Last->role != boddy || len < Last->len)
-			return NULL;
+			return 0;
+		unsigned int rt = Last->len;
 		LeftGetSimpleLock(&lock);
 		memcpy(buf, Last->buf, Last->len);
 		LeftGiveSimpleLock(&lock);
 		delete Last;
-		return buf;
+		return rt;
 	}
 
 	char *ThrSfeList::GetBuf(char *buf, unsigned int len) {

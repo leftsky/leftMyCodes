@@ -1,7 +1,7 @@
 ﻿/* Copyright (c) left
 ** FileName:		Mycodes.h
-** Version:			1.3.0
-** Update time:		2017-12-06
+** Version:			1.3.1
+** Update time:		2017-12-07
 */
 
 #ifndef _LEFT_MYCODES_CURRENCY_H_
@@ -174,7 +174,7 @@ namespace leftName {
 		ThrSfeList(char *buf, unsigned int len, LeftSimpleLock lock,
 						ThrSfeList *Last,ThrSfeList *Next);
 		~ThrSfeList();
-		char				*GetLast(char *buf, unsigned int len);
+		unsigned int		GetLast(char *buf, unsigned int len);
 		char				*GetBuf(char *buf, unsigned int len);
 		bool				Add(char *buf, unsigned int len);
 		unsigned int		len;
