@@ -1,0 +1,57 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html" charset="utf-8" />
+    <meta name="author" content="https://github.com/leftsky" />
+    <title>WebSocket master</title>
+    <script>
+        var socket;
+        function Connect(OpenFun) {
+            if (socket != null) return;
+            try{
+                socket = new WebSocket('ws://127.0.0.1:20002');
+            } catch (e) {
+                alert('error');
+                return;
+            }
+            socket.onopen = sOpen;
+            socket.onerror = sError;
+            socket.onmessage = sMessage;
+            socket.onclose = sClose;
+            return socket;
+        }
+        function sOpen() {
+            document.getElementById("rtMessage").value = 'connect success!';
+        }
+        function sError(e) {
+            document.getElementById('rtMessage').value = e;
+        }
+        function sMessage(msgPacket) {
+            document.getElementById('rtMessage').value =
+                msgPacket.data.toString();
+        }
+        function sClose(e) {
+            document.getElementById("rtMessage").value = e.code;
+        }
+        function Send() {
+            socket.send(document.getElementById("SendMessage").value);
+        }
+        function Close() {
+            socket.close();
+            socket = null;
+        }
+    </script>
+</head>
+
+<body>
+    <button id="connect" onclick="Connect();" style="width:100px">Connect</button>
+    <button id="send" onclick="Send();" style="width:100px">Send</button>
+    <button id="close" onclick="Close();" style="width:100px">Close</button>
+    <br/>
+    接收框：
+    <textarea id="rtMessage" rows="3" cols="20" style="width:300px"></textarea><br />
+    发送框：
+    <textarea id="SendMessage" rows="3" cols="20" style="width:300px"></textarea><br />
+</body>
+</html>

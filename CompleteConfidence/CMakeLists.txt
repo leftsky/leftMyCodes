@@ -10,14 +10,19 @@ PROJECT(CompleteConfidence)
 # Appoint the head file path
 INCLUDE_DIRECTORIES(
 include
+include/libevent
 )
 
 # Appoint the source directory
 AUX_SOURCE_DIRECTORY(src DIR_SRCS)
+AUX_SOURCE_DIRECTORY(include/LeftMyCodes DIR_MYCODES)
+AUX_SOURCE_DIRECTORY(include/easylogging DIR_EL)
 
 # Set environement variable
 SET(_MATH
 ${DIR_SRCS}
+${DIR_MYCODES}
+${DIR_EL}
 )
 
 # Add excutable file
@@ -25,8 +30,9 @@ ADD_EXECUTABLE(${PROJECT_NAME} ${_MATH})
 
 # Add link library
 IF (WIN32)  
-	TARGET_LINK_LIBRARIES(${PROJECT_NAME})
+	TARGET_LINK_LIBRARIES(${PROJECT_NAME}
+	../include/libevent)
 ELSEIF (UNIX)  
-	TARGET_LINK_LIBRARIES(${PROJECT_NAME} m)
+	TARGET_LINK_LIBRARIES(${PROJECT_NAME} m event event_pthreads)
 ENDIF ()  
 
