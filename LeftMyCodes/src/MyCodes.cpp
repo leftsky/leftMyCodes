@@ -1,7 +1,7 @@
 ﻿/* Copyright (c) left
 ** FileName:		Mycodes.cpp
-** Version:			1.3.1
-** Update time:		2017-12-07
+** Version:			1.3.2
+** Update time:		2018-1-9
 */
 
 #include "MyCodes.h"
@@ -154,6 +154,7 @@ namespace leftName {
 			return LEFT_ERROR_ARGVS;
 		*InfoHead = new IniInfo;
 		memset(*InfoHead, 0, sizeof(IniInfo));
+		pIniInfo fake = *InfoHead;
 		std::ifstream ini(path, std::ios::in);
 		if (!ini.is_open())
 			return LEFT_ERROR_IO_FILEOPEN;
@@ -168,11 +169,11 @@ namespace leftName {
 			snprintf(key, strlen(words) + 1, words);
 			snprintf(value, strlen(cut + 1) + 1, cut + 1);
 			pIniInfo p = new IniInfo;
-			(*InfoHead)->Next = p;
+			fake->Next = p;
 			p->Next = NULL;
 			p->Key = key;
 			p->Value = value;
-			*InfoHead = (*InfoHead)->Next;
+			fake = fake->Next;
 			std::cout << "Check info >>> " << p->Key << ":" << p->Value << std::endl;
 		}
 		ini.close();
@@ -248,8 +249,8 @@ namespace leftName {
 		return LEFT_SUCCESS;
 	}
 
-	ThrSfeList::ThrSfeList():
-		buf(NULL), 
+	ThrSfeList::ThrSfeList() :
+		buf(NULL),
 		len(0),
 		role(Head),
 		Last(NULL),
@@ -262,7 +263,7 @@ namespace leftName {
 		role(boddy),
 		Last(Last),
 		Next(Next),
-		lock(lock){
+		lock(lock) {
 		LeftGetSimpleLock(&lock);
 		if (len && buf) {
 			this->buf = new char[len];

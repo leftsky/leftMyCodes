@@ -1,7 +1,7 @@
 ﻿/* Copyright (c) left
 ** FileName:		Mycodes.h
-** Version:			1.3.1
-** Update time:		2017-12-07
+** Version:			1.3.2
+** Update time:		2018-1-9
 */
 
 #ifndef _LEFT_MYCODES_CURRENCY_H_
@@ -172,7 +172,7 @@ namespace leftName {
 	public:
 		ThrSfeList();
 		ThrSfeList(char *buf, unsigned int len, LeftSimpleLock lock,
-						ThrSfeList *Last,ThrSfeList *Next);
+			ThrSfeList *Last, ThrSfeList *Next);
 		~ThrSfeList();
 		unsigned int		GetLast(char *buf, unsigned int len);
 		char				*GetBuf(char *buf, unsigned int len);
@@ -181,7 +181,7 @@ namespace leftName {
 	private:
 		LeftSimpleLock		lock;
 		char				*buf;
-		enum				character{ Head, boddy, Tail };
+		enum				character { Head, boddy, Tail };
 		character			role;
 		ThrSfeList			*Last;
 		ThrSfeList			*Next;
